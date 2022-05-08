@@ -13,7 +13,7 @@ int main()
     const Is_y_odd<Object>      is_y_odd{};
 
     const auto and_predicate =
-        make_and_predicate<Object>(is_p_positive, is_x_even, is_y_odd);
+        make_and_predicate(is_p_positive, is_x_even, is_y_odd);
 
     for (const auto p : {3.14, -1.4142})
     {
