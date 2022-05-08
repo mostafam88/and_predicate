@@ -12,14 +12,8 @@ int main()
     const Is_x_even<Object>     is_x_even{};
     const Is_y_odd<Object>      is_y_odd{};
 
-    using And_predicate_two = private_implementation_detail::And_predicate<
-        Object, Is_p_positive<Object>, Is_x_even<Object>>;
-    using And_predicate_three =
-        private_implementation_detail::And_predicate<Object, And_predicate_two,
-                                                     Is_y_odd<Object>>;
-    const And_predicate_two   and_predicate_two{is_p_positive, is_x_even};
-    const And_predicate_three and_predicate_three{and_predicate_two, is_y_odd};
-
+    const auto and_predicate =
+        make_and_predicate<Object>(is_p_positive, is_x_even, is_y_odd);
 
     for (const auto p : {3.14, -1.4142})
     {
@@ -32,8 +26,7 @@ int main()
                 object.x = x;
                 object.y = y;
 
-                std::cout << (and_predicate_three(object) ? "[passed]"
-                                                          : "[failed]")
+                std::cout << (and_predicate(object) ? "[passed]" : "[failed]")
                           << " output" << '\n';
                 std::cout << "=======================================" << '\n';
             }
