@@ -1,5 +1,6 @@
 #include "iostream"
 
+#include "and_predicate.hpp"
 #include "is_p_positive.hpp"
 #include "is_x_even.hpp"
 #include "is_y_odd.hpp"
@@ -10,6 +11,15 @@ int main()
     const Is_p_positive<Object> is_p_positive{};
     const Is_x_even<Object>     is_x_even{};
     const Is_y_odd<Object>      is_y_odd{};
+
+    using And_predicate_two = private_implementation_detail::And_predicate<
+        Object, Is_p_positive<Object>, Is_x_even<Object>>;
+    using And_predicate_three =
+        private_implementation_detail::And_predicate<Object, And_predicate_two,
+                                                     Is_y_odd<Object>>;
+    const And_predicate_two   and_predicate_two{is_p_positive, is_x_even};
+    const And_predicate_three and_predicate_three{and_predicate_two, is_y_odd};
+
 
     for (const auto p : {3.14, -1.4142})
     {
@@ -22,11 +32,9 @@ int main()
                 object.x = x;
                 object.y = y;
 
-                const bool result = is_p_positive(object) &&
-                                    is_x_even(object) && is_y_odd(object);
-
-                std::cout << (result ? "[passed]" : "[failed]")
-                          << " and_predicate" << '\n';
+                std::cout << (and_predicate_three(object) ? "[passed]"
+                                                          : "[failed]")
+                          << " output" << '\n';
                 std::cout << "=======================================" << '\n';
             }
         }
